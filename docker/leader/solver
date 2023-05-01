@@ -57,7 +57,7 @@ class Runner:
         worker_node_ips = input_json.get("worker_node_ips", [])
         timeout = input_json.get("timeout_seconds")
 
-        run_list = ["/PRS", formula_file, "--preprocessor=1", "--clause_sharing=1", "--cutoff=%s" % timeout]
+        run_list = ["/PRS", formula_file, "--preprocessor=0", "--clause_sharing=1", "--cutoff=%s" % timeout]
 
         return run_list
 
