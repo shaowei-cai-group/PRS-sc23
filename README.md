@@ -1,7 +1,7 @@
 ## PRS Sovlers
 
-- PRS-sc23 (for parrallel)
-- PRS-nopre-sc23 (for parrallel)
-- PRS-distributed-sc23 (for cloud)
+- PRS-sc23 (for parallel track)
+- PRS-nopre-sc23 (for parallel track)
+- PRS-distributed-sc23 (for cloud track)
 
 Please check the branches with same name.
