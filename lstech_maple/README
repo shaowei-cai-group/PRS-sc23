@@ -1,0 +1,32 @@
+How to build:
+    use the command "./starexec_build"
+
+How to use:
+    In the "bin" directory, 
+    use the command "./lstech_maple <input_cnf>"
+    e,g. ./lstech_maple ./simple_v3_c2.cnf
+
+The format of CNF:
+    the CNF format includes lines of 3-lines:
+    p-line: start with "p cnf ", followed by the number of variables and clauses.
+    c-line: comment lines.
+    clause-line: a clause can be represented by a series of numbers end with 0.
+    
+    For example:
+    c simple_v3_c2.cnf
+    c
+    p cnf 3 2
+    1 -3 0
+    2 3 -1 0
+
+    The details can be found in "https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html"
+
+The output format:
+    c-line: comment lines
+    s-line: show the result of this call, SATISFIABLE UNSATISFIABLE or UNKNOWN.
+    v-line: show the model if SAT
+
+    For example:
+    c result of simple_v3_c2.cnf
+    s SATISFIABLE
+    v 1 -2 3 0

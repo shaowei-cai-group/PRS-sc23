@@ -1,0 +1,9 @@
+#!/bin/sh
+rm build/*.o build/*.or
+rm build/libRelaxed.a
+rm build/Relaxed
+rm bin/lstech_maple
+cd lstech/simp
+make clean
+make rs
+cp glucose_static ../../bin/lstech_maple
