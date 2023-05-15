@@ -70,7 +70,7 @@ class Runner:
         run_list = ["/competition/run_solver.sh"]
         run_list.append(combined_hostfile)
         run_list.append(formula_file)
-        run_list.append(timeout)
+        run_list.append(str(timeout))
 
         return run_list
 
