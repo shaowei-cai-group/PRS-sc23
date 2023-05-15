@@ -15,9 +15,15 @@ RUN make clean
 RUN ./configure
 RUN make -j
 
+WORKDIR /cloud-sat/mapleCOMSPS/m4ri-20140914
+RUN make clean
+RUN make -j
+
 WORKDIR /cloud-sat/mapleCOMSPS
 RUN make clean
 RUN make -j
+
+
 
 WORKDIR /cloud-sat/
 RUN make clean
