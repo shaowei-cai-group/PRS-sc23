@@ -42,7 +42,7 @@ public:
 
     sharer* s;
     std::vector<std::vector<int>> sharing_groups;
-    enum { KISSAT, LSTECH } solver_type;
+    enum { KISSAT, MAPLE } solver_type;
     enum { SAT, UNSAT, DEFAULT } worker_type;
     int worker_rs;
 
@@ -57,6 +57,7 @@ public:
     int finalResult;
     int winner_id;
     mutable boost::mutex winner_mtx;
+
     int maxtime;
     void update_winner(int id, int period) {
         boost::mutex::scoped_lock lock(winner_mtx); 

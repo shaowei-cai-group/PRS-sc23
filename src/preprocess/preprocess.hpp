@@ -71,20 +71,6 @@ public:
     int  card_elimination();
     int  scc_almost_one();
     void upd_occur(int v, int s);
-
-    int *abstract;
-    int gauss_eli_unit;
-    int gauss_eli_binary;
-    vec<xorgate> xors;
-    vec<int> scc_id;
-    vec<vec<int>> scc;
-    vec<vec<int>> xor_scc;
-    bool preprocess_gauss();
-    int  search_xors();
-    int  cal_dup_val(int i);
-    int  ecc_var();
-    int  ecc_xor();
-    int  gauss_elimination();
 };
 
 

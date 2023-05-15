@@ -15,7 +15,6 @@ void preprocess::preprocess_init() {
     q = new int[vars + 10];
     clean = new int[vars + 10];
     seen = new int[(vars << 1) + 10];
-    abstract = new int[clauses + 10];
     clause_delete.growTo(clauses+1, 0);
     nxtc.growTo(clauses+1, 0);
     occurp = new vec<int>[vars + 1];
@@ -49,7 +48,6 @@ void preprocess::release() {
     delete []a;
 
     delete []mapfrom;
-    delete []abstract;
     for (int i = 0; i <= vars; i++)
         occurp[i].clear(true), occurn[i].clear(true);
     delete []occurp;
@@ -85,7 +83,7 @@ void preprocess::update_var_clause_label() {
         for (int j = 0; j < l; j++)
             clause[id].push(color[abs(clause[i][j])] * pnsign(clause[i][j]));
     }
-    printf("c After preprocess: vars: %d -> %d , clauses: %d -> %d ,\n", vars, remain_var, clauses, id);
+    // printf("c After preprocess: vars: %d -> %d , clauses: %d -> %d ,\n", vars, remain_var, clauses, id);
     for (int i = id + 1; i <= clauses; i++) 
         clause[i].clear(true);
     for (int i = remain_var + 1; i <= vars; i++)
@@ -173,15 +171,6 @@ int preprocess::do_preprocess(char* filename) {
     preprocess_init();
     int res = 1;
 
-    // if (vars <= 1e5 && clauses <= 1e6) {    
-    //     res = preprocess_gauss();
-    //     if (!res) {
-    //         printf("c solved by gauss elimination\n");
-    //         release();
-    //         return 0;
-    //     }
-    // }
-
     res = preprocess_up();
     if (!res) {
         release();
@@ -191,11 +180,10 @@ int preprocess::do_preprocess(char* filename) {
         return 0;
     }
 
-
     if (vars <= 1e5 && clauses <= 1e6) {
         res = preprocess_card();
         if (!res) {
-            printf("c solved by card elimination\n");
+            // printf("c solved by card elimination\n");
             release();
             delete []mapto;
             delete []mapval;

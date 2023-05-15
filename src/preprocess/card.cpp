@@ -310,7 +310,7 @@ int preprocess::card_elimination() {
 
 int preprocess::preprocess_card() {
     int sone = search_almost_one();
-    printf("c [CE] almost one cons: %d\n", sone);
+    // printf("c [CE] almost one cons: %d\n", sone);
     if (!sone) return 1;
     int scc = scc_almost_one();
     int sz = card_one.size();

@@ -17,7 +17,7 @@ bool preprocess::preprocess_binary() {
             clause[i][j] = tolit(clause[i][j]);
         }
     }
-    printf("c sz %d\n", clause[1].size());
+    // printf("c sz %d\n", clause[1].size());
     nlit = (vars << 1) + 2;
     for (int i = 1; i <= vars; i++) f[i] = i, val[i] = 1, varval[i] = color[i] = resseen[tolit(i)] = resseen[tolit(-i)] = 0;
     for (int i = 1; i <= clauses; i++) clause_delete[i] = 0;
@@ -192,7 +192,7 @@ bool preprocess::preprocess_binary() {
                 else varval[i] = varval[f[i]] * val[i];
             }
     }
-    printf("c turns: %d\n", turn);
+    // printf("c turns: %d\n", turn);
 
     for (int i = 1; i <= clauses; i++) {
         if (clause_delete[i]) continue;

@@ -18,7 +18,7 @@ void worker_main(light* S, int num_procs, int rank) {
     int start;
     MPI_Recv(&start, 1, MPI_INT, 0, START_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     if(!start) {
-        printf("c [worker%d] I have no need to start\n", rank);
+        // printf("c [worker%d] I have no need to start\n", rank);
         MPI_Barrier(MPI_COMM_WORLD);
         return;
     }
@@ -55,16 +55,16 @@ void worker_main(light* S, int num_procs, int rank) {
     // printf("threads: %lf\n", threads);
 
     if(threads > 16) {
-        printf("c [worker%d] threads per worker were set %d by default : %d\n", rank, OPT(threads));
+        // printf("c [worker%d] threads per worker were set %d by default : %d\n", rank, OPT(threads));
     } else {
         OPT(threads) = floor(threads);
-        printf("c [worker%d] too big instance %lld\n", rank, cnf_length);
-        printf("c [worker%d] threads per worker were set %d by memcheck %d\n", rank, OPT(threads));
+        // printf("c [worker%d] too big instance %lld\n", rank, cnf_length);
+        // printf("c [worker%d] threads per worker were set %d by memcheck %d\n", rank, OPT(threads));
     }
 
     int res = S->run();
 
-    printf("c [worker%d] kissat exit with result: %d\n", rank, res);
+    // printf("c [worker%d] kissat exit with result: %d\n", rank, res);
 
     MPI_Request *solved_request = new MPI_Request();
     MPI_Request *model_request = new MPI_Request();
@@ -82,20 +82,20 @@ void worker_main(light* S, int num_procs, int rank) {
             auto clk_now = std::chrono::high_resolution_clock::now();
             int solve_time = std::chrono::duration_cast<std::chrono::seconds>(clk_now - clk_st).count();
             if (solve_time >= OPT(times)) {
-                printf("c [worker%d] solve time out\n", rank);
+                // printf("c [worker%d] solve time out\n", rank);
                 break;
             }
 
             // when getting terminate signal
             if(MPI_Test(&S->terminal_request, &flag, MPI_STATUS_IGNORE) == MPI_SUCCESS && flag == 1) {
-                printf("c [worker%d] getting terminate signal\n", rank);
+                // printf("c [worker%d] getting terminate signal\n", rank);
                 break;
             }
 
             // when getting model signal
             if(MPI_Test(model_request, &flag, MPI_STATUS_IGNORE) == MPI_SUCCESS && flag == 1) {
 
-                printf("c [worker%d] getting send model signal\n", rank);
+                // printf("c [worker%d] getting send model signal\n", rank);
 
                 // send model and break;
                 MPI_Send(S->model.data, S->model.size(), MPI_INT, 0, MODEL_REPORT_TAG, MPI_COMM_WORLD);

@@ -16,13 +16,13 @@ RUN make clean
 RUN ./configure
 RUN make -j
 
-WORKDIR /cloud-sat/lstech_maple
-RUN make clean
-RUN make -j
-
 WORKDIR /cloud-sat/kissat-inc
 RUN make clean
 RUN ./configure
+RUN make -j
+
+WORKDIR /cloud-sat/mapleCOMSPS
+RUN make clean
 RUN make -j
 
 WORKDIR /cloud-sat/

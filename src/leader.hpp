@@ -14,9 +14,9 @@ void leader_main(light* S, int num_procs, int rank) {
 
     auto clk_st = std::chrono::high_resolution_clock::now();
 
-    __global_paras.print_change();
+    // __global_paras.print_change();
 
-    printf("c [leader] preprocess(simplify) input data\n");
+    // printf("c [leader] preprocess(simplify) input data\n");
 
     // 进行化简    
     auto pre = new preprocess();
@@ -31,7 +31,7 @@ void leader_main(light* S, int num_procs, int rank) {
     // preprocess 证明了UNSAT 则不需要启动云计算
     if(!start) {
         MPI_Barrier(MPI_COMM_WORLD);
-        printf("c [leader] UNSAT!!!!!! by preprocess\n");
+        // printf("c [leader] UNSAT!!!!!! by preprocess\n");
         printf("s UNSATISFIABLE\n");
         return;
     }
@@ -51,9 +51,9 @@ void leader_main(light* S, int num_procs, int rank) {
 
     int cnf_length = str_ref.size() + 1;
 
-    printf("c [leader] length of cnf (bytes): %lld\n", cnf_length);
+    // printf("c [leader] length of cnf (bytes): %lld\n", cnf_length);
 
-    printf("c [leader] hand out length of cnf instance to all nodes\n");
+    // printf("c [leader] hand out length of cnf instance to all nodes\n");
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -61,13 +61,13 @@ void leader_main(light* S, int num_procs, int rank) {
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    printf("c [leader] hand out cnf instance to all nodes\n");
+    // printf("c [leader] hand out cnf instance to all nodes\n");
 
     MPI_Bcast(cstr, cnf_length, MPI_CHAR, 0, MPI_COMM_WORLD);
 
     MPI_Barrier(MPI_COMM_WORLD);
 
-    printf("c [leader] hand out done!\n");
+    // printf("c [leader] hand out done!\n");
 
     int is_sat;
     MPI_Request solved;
@@ -84,7 +84,7 @@ void leader_main(light* S, int num_procs, int rank) {
         auto clk_now = std::chrono::high_resolution_clock::now();
         int solve_time = std::chrono::duration_cast<std::chrono::seconds>(clk_now - clk_st).count();
         if (solve_time >= OPT(times)) {
-            printf("c [leader] solve time out\n");
+            // printf("c [leader] solve time out\n");
             break;
         }
 
@@ -105,7 +105,7 @@ void leader_main(light* S, int num_procs, int rank) {
 
             if(is_sat) {
                 res = 10;
-                printf("c [leader] received model size: %d\n", pre->vars);
+                // printf("c [leader] received model size: %d\n", pre->vars);
                 // printf("c SAT!!!!!!\n");
 
                 MPI_Send(NULL, 0, MPI_INT, status.MPI_SOURCE, MODEL_REPORT_TAG, MPI_COMM_WORLD);
@@ -131,7 +131,7 @@ void leader_main(light* S, int num_procs, int rank) {
         for (int i = 1; i <= pre->orivars; i++) {
             printf("%d ", i * pre->mapval[i]);
         }
-        printf("\n");
+        printf("0\n");
         delete []sol;
     } else if(res == 20) {
         printf("s UNSATISFIABLE\n");
@@ -141,6 +141,6 @@ void leader_main(light* S, int num_procs, int rank) {
 
     auto clk_now = std::chrono::high_resolution_clock::now();
     double solve_time = std::chrono::duration_cast<std::chrono::milliseconds>(clk_now - clk_st).count();
-    printf("c time: %.3f\n", solve_time / 1000);
+    // printf("c time: %.3f\n", solve_time / 1000);
 
 }

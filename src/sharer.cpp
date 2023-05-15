@@ -100,6 +100,7 @@ void sharer::share_clauses_to_other_node(int from, const std::vector<shared_ptr<
 }
 
 int sharer::receive_clauses_from_other_node(std::vector<shared_ptr<clause_store>> &clauses, int &transmitter) {
+
     clauses.clear();
 
     int flag;
@@ -153,15 +154,15 @@ void sharer::clause_sharing_init(std::vector<std::vector<int>> &sharing_groups) 
     MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    printf("c sharing groups: ");
-    for(int i=0; i<sharing_groups.size(); i++) {
-        printf(" [ ");
-        for(int j=0; j<sharing_groups[i].size(); j++) {
-            printf("%d ", sharing_groups[i][j]);
-        }
-        printf("]");
-    }
-    printf("\n");
+    // printf("c sharing groups: ");
+    // for(int i=0; i<sharing_groups.size(); i++) {
+    //     printf(" [ ");
+    //     for(int j=0; j<sharing_groups[i].size(); j++) {
+    //         printf("%d ", sharing_groups[i][j]);
+    //     }
+    //     printf("]");
+    // }
+    // printf("\n");
 
     if(OPT(share_method)) {
         init_tree_transmission(sharing_groups);
@@ -174,10 +175,10 @@ void sharer::clause_sharing_init(std::vector<std::vector<int>> &sharing_groups) 
 }
 
 void sharer::clause_sharing_end() {
-    printf("c node%d sharing nums: %d\nc sharing time: %.2lf\n", rank, nums, share_time);
-    printf("c node%d sharing received_num_by_network: %d\n", rank, num_received_clauses_by_network);
-    printf("c node%d sharing skip_num_by_network: %d\n", rank, num_skip_clauses_by_network);
-    printf("c node%d sharing unique reduce percentage: %.2f%%\n", rank, (double) num_skip_clauses_by_network / num_received_clauses_by_network * 100);
+    // printf("c node%d sharing nums: %d\nc sharing time: %.2lf\n", rank, nums, share_time);
+    // printf("c node%d sharing received_num_by_network: %d\n", rank, num_received_clauses_by_network);
+    // printf("c node%d sharing skip_num_by_network: %d\n", rank, num_skip_clauses_by_network);
+    // printf("c node%d sharing unique reduce percentage: %.2f%%\n", rank, (double) num_skip_clauses_by_network / num_received_clauses_by_network * 100);
 }
 
 void sharer::do_clause_sharing() {
@@ -188,7 +189,7 @@ void sharer::do_clause_sharing() {
     auto clk_now = std::chrono::high_resolution_clock::now();
     int solve_time = std::chrono::duration_cast<std::chrono::milliseconds>(clk_now - clk_st).count();
 
-    printf("c node%d(%d)round %d, time: %d.%d\n", rank, S->worker_type, nums, solve_time / 1000, solve_time % 1000);
+    // printf("c node%d(%d)round %d, time: %d.%d\n", rank, S->worker_type, nums, solve_time / 1000, solve_time % 1000);
 
     // 导入外部网络传输的子句
     std::vector<shared_ptr<clause_store>> clauses;
@@ -211,7 +212,7 @@ void sharer::do_clause_sharing() {
         share_clauses_to_other_node(from, clauses);
     }
 
-    printf("c node%d(%d) get %d exported lits from network\n", rank, S->worker_type, received_lits);
+    // printf("c node%d(%d) get %d exported lits from network\n", rank, S->worker_type, received_lits);
 
     for (int i = 0; i < producers.size(); i++) {
         cls.clear();
@@ -290,6 +291,7 @@ int sharer::sort_clauses(int x) {
             }
         }
     }
+    // printf("c share %d lits\n", OPT(share_lits) - space);
     return (OPT(share_lits) - space) * 100 / OPT(share_lits);
 }
 
@@ -305,7 +307,7 @@ void sharer::init_tree_transmission(std::vector<std::vector<int>> &sharing_group
         }
     }
     
-    printf("c =========build tree=========\n");
+    // printf("c =========build tree=========\n");
     for(int i=0; i<sharing_groups.size(); i++) {
         // create binary trees for every group;
         std::vector<int> &group = sharing_groups[i];
@@ -326,7 +328,7 @@ void sharer::init_tree_transmission(std::vector<std::vector<int>> &sharing_group
                 son[rs[0]][rs[k]][0] = ( 2 * k + 1 < rs.size() ) ? rs[ 2 * k + 1 ] : -1;
                 son[rs[0]][rs[k]][1] = ( 2 * k + 2 < rs.size() ) ? rs[ 2 * k + 2 ] : -1;
                 
-                printf("c son[%d][%d][%d]=%d\tson[%d][%d][%d]=%d\n", rs[0], rs[k], 0, son[rs[0]][rs[k]][0], rs[0], rs[k], 1, son[rs[0]][rs[k]][1]);
+                // printf("c son[%d][%d][%d]=%d\tson[%d][%d][%d]=%d\n", rs[0], rs[k], 0, son[rs[0]][rs[k]][0], rs[0], rs[k], 1, son[rs[0]][rs[k]][1]);
             }
         }
     }
