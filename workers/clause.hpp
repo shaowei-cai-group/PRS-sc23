@@ -19,16 +19,12 @@ struct clause_store {
     bool free_clause() {
         int ref = refs.fetch_sub(1);
         if (ref <= 1) {
-            // for (int i = 0; i < size; i++)
-            //     printf("%d ", data[i]);
-            // puts("");
             free(data);
             return true;
         }
         return false;
     }
     ~clause_store() {
-        puts("free");
     }
 };
 
@@ -49,7 +45,6 @@ struct period_clauses {
     bool free_clause() {
         int ref = refs.fetch_sub(1);
         if (ref <= 1) {
-            if (ref <= 0) puts("**************************========================");
             return true;
         }
         return false;
@@ -72,14 +67,12 @@ struct period_queue {
     }
     void pop(int assert_period = -1) {
         boost::mutex::scoped_lock lock(mtx);
-        if (assert_period != -1 && q.front()->period != assert_period) printf("c ............false free pos\n");
         q.front()->release_clause();
         q.pop_front();
     }
     period_clauses* find(int period) {
         boost::mutex::scoped_lock lock(mtx);
         int sp = q.front()->period;
-        if (period - sp >= q.size()) puts("may occur wrong");
         return q[period - sp];
     }
 };

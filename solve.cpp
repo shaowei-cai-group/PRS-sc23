@@ -27,22 +27,16 @@ void * solve_worker(void *arg) {
    while (!terminated) {
         int res = sq->solve();
         if (sq->controller->opt->DCE) {
-            printf("c %d solved, res is %d\n", sq->id, res);
             if (res) {
                 terminated = 1;
                 result = res; 
-                // printf("c %d solved 1\n", sq->id);
                 sq->internal_terminate();
-                // printf("c %d solved 2\n", sq->id);
                 sq->controller->update_winner(sq->id, sq->period);
-                // printf("c %d solved 3\n", sq->id);
                 if (res == 10) sq->get_model(sq->model);
             }
-            printf("c %d really solved, period is %d\n", sq->id, sq->period);
         }
         else {
             if (res && !terminated) {
-                printf("c result: %d, winner is %d, winner run %d confs\n", res, sq->id, sq->get_conflicts());
                 terminated = 1;
                 sq->controller->terminate_workers();
                 result = res;
@@ -50,7 +44,6 @@ void * solve_worker(void *arg) {
                 winner_conf = sq->get_conflicts();
                 if (res == 10) sq->get_model(sq->model);
             }
-            printf("c get result %d with res %d\n", sq->id, res);
         }
    }
    return NULL;
@@ -104,14 +97,10 @@ void light::diversity_workers() {
             else
                 workers[i]->configure("phase", 1);
         }
-        for (int j = 0; j < configure_name[i].size(); j++) {
-            workers[i]->configure(configure_name[i][j], configure_val[i][j]);
-        }
     }
 }
 
 void light::terminate_workers() {
-    printf("c controller reach limit\n");
     for (int i = 0; i < OPT(nThreads); i++) {
         if (OPT(clause_sharing) == 1 && OPT(DCE) == 1) 
             workers[i]->external_terminate();
@@ -135,16 +124,11 @@ void light::parse_input() {
 }
 
 int light::solve() {
-    printf("c -----------------solve start----------------------\n");
     pthread_t *ptr = new pthread_t[OPT(nThreads)];
     for (int i = 0; i < OPT(nThreads); i++) {
       pthread_create(&ptr[i], NULL, solve_worker, workers[i]);
     }
 
-    thread_inf unimprove[OPT(nThreads)];
-    auto clk_sol_st = std::chrono::high_resolution_clock::now();
-    int pre_time = std::chrono::duration_cast<std::chrono::seconds>(clk_sol_st - clk_st).count();
-    int sol_thd = 0, intv_time = OPT(reset_time);
     while (!terminated) {
         usleep(100000);        
         auto clk_now = std::chrono::high_resolution_clock::now();
@@ -154,23 +138,13 @@ int light::solve() {
             terminate_workers();
         }
     }
-    printf("c ending solve\n");
-    // terminate_workers(); //important, need combine nps/dps !!!!!!!!!!!!!!!!
 
     for (int i = 0; i < OPT(nThreads); i++) {
         pthread_join(ptr[i], NULL);
     }
     
-    printf("c ending join\n");
     if (result == 10)
         workers[winner_id]->model.copyTo(model);
-    auto clk_now = std::chrono::high_resolution_clock::now();
-    double solve_time = std::chrono::duration_cast<std::chrono::milliseconds>(clk_now - clk_sol_st).count();
-    solve_time = 0.001 * solve_time;
-    printf("c solve time: %.2lf\nc winner is %d, period is %d\n", solve_time, winner_id, winner_period);
-    for (int i = 0; i < OPT(nThreads); i++) {
-        printf("c thread %d waiting time: %.2lf\n", i, workers[i]->get_waiting_time());
-    }   
     delete []ptr;
     return result;
 }

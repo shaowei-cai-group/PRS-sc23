@@ -17,7 +17,6 @@ void Bitset::print() {
 
 void Bitset::allocate(int sz) noexcept{
     n = sz;
-    assert(n % bits == 0);
     m_size = n / bits;
     array = (ull*)aligned_alloc(64, sizeof(ull) * m_size);
 }
@@ -97,7 +96,6 @@ void Bitset::xors(const Bitset& u, const Bitset& v, int s, int s1, int s2) noexc
 }
 
 bool Bitset::operator==(const Bitset& rhs) const noexcept {
-    assert(m_size == rhs.m_size);
     for (int i = 0; i < m_size; i++)
     {
         if (array[i] != rhs.array[i]) { return false; }
@@ -154,7 +152,6 @@ Bitset& Bitset::flip() noexcept {
 }
 
 Bitset& Bitset::operator=(const Bitset& other) noexcept {
-    assert(n == other.n);
     for (int i = 0; i < m_size; i++)
     {
         array[i] = other.array[i];

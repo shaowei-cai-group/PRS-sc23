@@ -16,7 +16,6 @@ void basekissat::add(int l) {
 }
 
 void basekissat::configure(const char* name, int val) {
-    printf("c %d set %s to %d\n", id, name, val);
     kissat_set_option(solver, name, val);
 }
 
@@ -44,8 +43,6 @@ void basekissat::exp_clause(void* cl, int lbd) {
         int eidx = PEEK_STACK(solver->exportk, (v >> 1));
         cls->data[i] = v & 1 ? -eidx : eidx;
     }
-    // ++S->x2;
-    // if (S->id == 0) puts("");
     cls->lbd = lbd;
     export_clause.push(cls);
 }
@@ -63,7 +60,6 @@ bool basekissat::imp_clause(clause_store *cls, void *cl) {
     for (int i = 0; i < cls->size; i++) {
         // S->outimport << cls->data[i] << std::endl;
         int eidx = abs(cls->data[i]);
-        if (eidx >= SIZE_STACK(solver->import)) printf("c wrong %d\n", eidx);
         import *import = &PEEK_STACK (solver->import, eidx);
         if (import->eliminated) return false;
         else {

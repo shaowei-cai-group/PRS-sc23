@@ -92,24 +92,6 @@ int preprocess::search_xors() {
             xors.push(xorgate(i, 0, l));
         if (rhs[1] == 2 * required_num)
             xors.push(xorgate(i, 1, l));
-        // if (rhs[0] == 2 * required_num && rhs[1] == 2 * required_num) {
-        //     printf("%d %d\n", rhs[0], rhs[1]);
-        //     for (int j = 0; j < xorsp.size(); j++) {
-        //         int o = xorsp[j];
-        //         for (int k = 0; k < clause[o].size(); k++) {
-        //             printf("%d ", clause[o][k]);
-        //         }
-        //         printf(" ---------- %d\n", o);
-        //     }
-        // }
-        // int a = abs(clause[i][0]) - 1;
-        // int b = abs(clause[i][1]) - 1;
-        // int c = abs(clause[i][2]) - 1;
-        // if (a > b) std::swap(a, b);
-        // if (a > c) std::swap(a, c);
-        // if (b > c) std::swap(b, c);
-        // printf("%d %d %d ", a, b, c);
-        // puts("");
     }
     return xors.size();
 }
@@ -253,15 +235,10 @@ int preprocess::gauss_elimination() {
 
 bool preprocess::preprocess_gauss() {
     int nxors = search_xors();
-    printf("c [GE] XORs: %d (time: 0.00)\n", nxors);
     if (!nxors) return true;
     int nvarscc = ecc_var();
-    printf("c [GE] VAR SCC: %d\n", nvarscc);
     int nxorscc = ecc_xor();
-    printf("c [GE] XOR SCCs: %d (time: 0.00)\n", nxorscc);
     int res = gauss_elimination();
-    printf("c [GE] unary xor: %d, bin xor: %d, bin added\n", gauss_eli_unit, gauss_eli_binary);
-    if (!res) {printf("c [GE] UNSAT\n");}
     xors.clear(true);
     scc_id.clear(true);
     for (int i = 0; i < scc.size(); i++)

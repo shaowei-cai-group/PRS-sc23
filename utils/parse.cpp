@@ -14,7 +14,6 @@ char *read_until_new_line(char *p)
     {
         if (*p == '\0')
         {
-            // printf("c parse error: unexpected EOF");
             exit(0);
         }
         ++p;
@@ -80,19 +79,7 @@ void readfile(const char *file, int *vars, int *clauses, vec<vec<int>> &clause) 
         }
     }
     if (num_clauses != *clauses + 1) {
-        // printf("c parse warning: clauses: %d, real clauses: %d\n", clauses, num_clauses - 1);
         *clauses = num_clauses - 1;
     }
     delete []data;
 }
-
-// void preprocess::write_cnf() {
-//     printf("p cnf %d %d\n", vars, clauses);
-//     for (int i = 1; i <= clauses; i++) {
-//         int l = clause[i].size();
-//         for (int j = 0; j < l; j++) {
-//             printf("%d ", clause[i][j]);
-//         }
-//         puts("0");
-//     }
-// }

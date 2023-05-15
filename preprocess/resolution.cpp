@@ -51,7 +51,6 @@ bool preprocess::preprocess_resolution() {
             q[++r] = i, clean[i] = 1;
         }
     }
-    printf("c len %d\n", r);
     
     int now_turn = 0, seen_flag = 0;
     vec<int> vars;
