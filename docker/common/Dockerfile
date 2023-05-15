@@ -15,6 +15,11 @@ RUN make clean
 RUN ./configure
 RUN make -j
 
+WORKDIR /PRS/preprocess/m4ri-20140914
+RUN make clean
+RUN ./configure
+RUN make -j
+
 WORKDIR /PRS
 RUN make clean
 RUN make -j
