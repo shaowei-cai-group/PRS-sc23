@@ -1,7 +1,7 @@
 FROM satcomp-prs-distributed:common AS builder
 USER root
 
-FROM satcomp-infrastructure:leader
+FROM satcomp-infrastructure:worker
 WORKDIR /
 
 COPY --from=builder /cloud-sat/PRS-distributed /PRS-distributed
