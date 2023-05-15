@@ -63,12 +63,14 @@ class Runner:
     def get_command(self, input_json):
         formula_file = input_json.get("formula_file")
         worker_node_ips = input_json.get("worker_node_ips", [])
+        timeout = input_json.get("timeout_seconds", 1000)
         
         combined_hostfile = self.create_hostfile(worker_node_ips, self.request_directory)
 
         run_list = ["/competition/run_solver.sh"]
         run_list.append(combined_hostfile)
         run_list.append(formula_file)
+        run_list.append(timeout)
 
         return run_list
 
