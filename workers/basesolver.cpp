@@ -8,7 +8,6 @@ int basesolver::get_period() {
 void basesolver::inc_period() {
     boost::mutex::scoped_lock lock(mtx);
     period++;
-    if (period % 100 == 0) printf("c %d reach period %d\n", id, period);
     cond.notify_all();
 };
 
@@ -23,7 +22,6 @@ void basesolver::external_terminate() {
         boost::mutex::scoped_lock lock(mtx);
         terminated = 1;
         cond.notify_all();
-        // printf("c thread %d terminated\n", id);
     }
     terminate();
 }
@@ -112,13 +110,9 @@ void cbk_start_new_period(void *solver) {
         S->terminate();
         return;
     }
-    // printf("c thread %d into select %d\n", S->id, S->period);
     S->select_clauses();
-    // printf("c %d now finish period %d\n", S->id, S->get_period());
     S->inc_period();
-    // printf("c thread %d start import at %d\n", S->id, S->period);
     should_free = share->import_clauses(S->id);
-    // printf("c thread %d finish import at %d\n", S->id, S->period);
     if (should_free == -1) {
         S->internal_terminate();
         S->terminate();
@@ -126,14 +120,11 @@ void cbk_start_new_period(void *solver) {
     auto clk_now = std::chrono::high_resolution_clock::now();
     int solve_time = std::chrono::duration_cast<std::chrono::milliseconds>(clk_now - clk_st).count();
     S->waiting_time += 0.001 * solve_time;
-    // printf("c %d wait for %d.%03ds\n", S->id, solve_time / 1000, solve_time % 1000);
-    // printf("c %d finish sharing\n", S->id);
 }
 
 void cbk_free_clauses(void *solver) {
     basesolver* S = (basesolver *) solver;
     sharer *share = S->in_sharer;
-    // if (S->unfree.size()) printf("free %d period\n", S->unfree.size());
     for (int id = 0; id < S->unfree.size(); id++) {
         int import_period = S->unfree[id];
         // int current_period = S->get_period() - 1, import_period = current_period - share->margin;
@@ -142,11 +133,8 @@ void cbk_free_clauses(void *solver) {
             if (i == S->id) continue;
             basesolver *s = share->producers[i];
             period_clauses *pc = s->pq.find(import_period);
-            if (pc->period != import_period)
-                puts("*******************************************************");
             if (pc->free_clause()) {
                 s->pq.pop(import_period);
-                // printf("thread %d enter, %d is free\n", S->id, i);
             }
         }
     }

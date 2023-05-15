@@ -6,19 +6,13 @@ int preprocess::find_fa(int x) {
 
 int preprocess::rematch_eql(int x) {
     if (clause[x].size() != 2 || clause[x - 1].size() != 2) return 0;
-    // if (abs(clause[x][0]) > abs(clause[x][1])) std::swap(clause[x][0], clause[x][1]);
-    // if (abs(clause[x - 1][0]) > abs(clause[x - 1][1])) std::swap(clause[x - 1][0], clause[x - 1][1]);
-    // if (clause[x][0] != -clause[x - 1][0]) return 0;
-    // if (clause[x][1] != -clause[x - 1][1]) return 0;
-    // assert(find(abs(clause[x][1])) == abs(clause[x][1]));
-    // f[find(abs(clause[x][1]))] = find(abs(clause[x][0]));
     int a = clause[x][0], b = clause[x][1];
 	int c = clause[x - 1][0], d = clause[x - 1][1];
 	if (abs(a) > abs(b)) std::swap(a, b);
 	if (abs(c) > abs(d)) std::swap(c, d);
 	if (a != -c) return 0;
 	if (b != -d) return 0;
-	assert(find_fa(abs(b)) == abs(b));
+	if (find_fa(abs(b)) != abs(b)) return -1;
 	f[find_fa(abs(b))] = find_fa(abs(a));
     return 1;
 }
@@ -98,7 +92,9 @@ bool preprocess::cnf2aig() {
     int last = 0; flag = 0;
     vec<int> val;
     for (int i = 1; i <= clauses; i++) {
-        if (i - last >= 2 && rematch_eql(i)) {
+        int res = 0;
+        if (i - last >= 2 && (res = rematch_eql(i)) != 0) {
+            if (res == -1) return false;
             if (i - last > 2) return false;
             last = i;
         }
@@ -124,23 +120,20 @@ bool preprocess::cnf2aig() {
     cell = new int[maxvar + val.size() + 1];
     for (int i = 1; i <= maxvar + val.size(); i++) cell[i] = 0;
     for (int i = 1; i < gate.size(); i++) {
-        assert(gate[i].out > 0);
-        assert(find_fa(gate[i].out) == gate[i].out);
+        if (gate[i].out <= 0) return false;
+        if (find_fa(gate[i].out) != gate[i].out) return false;
         gate[i][0] = pnsign(gate[i][0]) * find_fa(abs(gate[i][0]));
         gate[i][1] = pnsign(gate[i][1]) * find_fa(abs(gate[i][1]));
         if (cell[gate[i].out]) return false;
         cell[gate[i].out] = i;
         seen[gate[i].out] = flag;
         psign[abs(gate[i][0])] = psign[abs(gate[i][1])] = flag;
-        // printf("%d = %d %d\n", gate[i].out, gate[i].in[0], gate[i].in[1]);
     }
-    printf("c PI: ");
     vec<int> is_input, andg;
     is_input.growTo(vars + 1, 0);
     for (int i = 1; i <= vars; i++)
         if (psign[i] == flag && seen[i] != flag) 
-            epcec_in.push(i), is_input[i] = 1, fixed[i] = 0, printf("%d ", i);
-    puts("");
+            epcec_in.push(i), is_input[i] = 1, fixed[i] = 0;
     rins = epcec_in.size();
     for (int i = 0; i < val.size(); i++) {
         val[i] = find_fa(abs(val[i])) * pnsign(val[i]); 
@@ -149,7 +142,6 @@ bool preprocess::cnf2aig() {
         else andg.push(v);
     }
     nxors /= 96;
-    printf("c real inputs: %d\nc xors: %d\n", rins, nxors);
     if (andg.size() == 0) return false;
     if (andg.size() >= 2) {
         int lastid = andg[0];
@@ -260,7 +252,6 @@ bool preprocess::do_epcec() {
         ull extra_values = 0;
 
         while(extra_values < (1LL << (extra_len)) ) {
-            if (extra_values % (1<<7) == 0) printf("c epcec round [%llu / %lld]\n", extra_values, (1LL << (extra_len)));
             for(int i=0; i<ni; i++) {
                 int v = epcec_in[i]; 
                 result[v] = new Bitset;
@@ -288,7 +279,6 @@ bool preprocess::do_epcec() {
                     const ull all_one = ~all_zero;
                     for(int j=0; j<sz/64; j++) {
                         int value = (j * 64 / unit) % 2;
-                        assert(j < result[input_var]->m_size);
                         if(value) result[input_var]->array[j] = all_one;
                         else result[input_var]->array[j] = all_zero;
                     }
@@ -345,17 +335,16 @@ bool preprocess::do_epcec() {
         }
         return _simulate(result, bit_size);
     } 
-    return true;
+    return 1;
 }
 
 int preprocess::preprocess_circuit() {
     int res = cnf2aig();
-    if (!res || rins <= 6 || rins > 32 || nxors < 10) goto failed;
+    if (!res || rins <= 16 || rins > 32) goto failed;
 
     epcec_preprocess();
     res = do_epcec();
     if (!res) {
-        printf("c epcec result: SAT\n");
         int *copy_model = new int[vars + 1];
 		for (int i = 1; i <= vars; i++) {
             copy_model[i] = model[i];
@@ -374,7 +363,7 @@ int preprocess::preprocess_circuit() {
     delete []topo_counter;
     delete []used;
     gate.clear(true);
-    return res == 0 ? 10 : 0;
+    return res == 0 ? 10 : 20;
 failed:
     gate.clear(true);
     return 0;

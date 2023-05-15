@@ -42,7 +42,6 @@ void cvec_release(cvec *vec)
 
 int cvec_data(cvec *vec, int id)
 {
-    assert(id < vec->sz);
     return vec->data[id];
 }
 

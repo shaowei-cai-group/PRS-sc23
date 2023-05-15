@@ -42,7 +42,6 @@ public:
     void sharing_finish() {
         boost::mutex::scoped_lock lock(mtx);
         waitings = 0;
-        // printf("c sharing thread finish sharing\n");
         cond.notify_all();
     }
     int sort_clauses(int x);

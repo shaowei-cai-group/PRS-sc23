@@ -70,13 +70,11 @@ void preprocess::upd_occur(int v, int s) {
     if (v > 0) {
         for (int j = 0; j < occurp[x].size(); j++)
             if (occurp[x][j] != s) occurp[x][t++] = occurp[x][j]; 
-        // assert(t == occurp[x].size() - 1);
         occurp[x].setsize(t);
     }
     else {
         for (int j = 0; j < occurn[x].size(); j++)
             if (occurn[x][j] != s) occurn[x][t++] = occurn[x][j];
-        // assert(t == occurn[x].size() - 1);
         occurn[x].setsize(t);
     }
 }
@@ -310,7 +308,6 @@ int preprocess::card_elimination() {
 
 int preprocess::preprocess_card() {
     int sone = search_almost_one();
-    printf("c [CE] almost one cons: %d\n", sone);
     if (!sone) return 1;
     int scc = scc_almost_one();
     int sz = card_one.size();
@@ -323,7 +320,6 @@ int preprocess::preprocess_card() {
         cdel.clear(true);
         return 1;
     }
-    // printf("c [CE] scc cons: %d\n", scc);
     int res = card_elimination();
     for (int i = 0; i < mat.size(); i++)
         mat[i].clear(true);

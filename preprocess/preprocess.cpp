@@ -88,7 +88,6 @@ void preprocess::update_var_clause_label() {
         for (int j = 0; j < l; j++)
             clause[id].push(color[abs(clause[i][j])] * pnsign(clause[i][j]));
     }
-    printf("c After preprocess: vars: %d -> %d , clauses: %d -> %d ,\n", vars, remain_var, clauses, id);
     for (int i = id + 1; i <= clauses; i++) 
         clause[i].clear(true);
     for (int i = remain_var + 1; i <= vars; i++)
@@ -170,38 +169,31 @@ void preprocess::get_complete_model() {
 }
 
 int preprocess::do_preprocess(char* filename) {
-    auto startp = std::chrono::high_resolution_clock::now();
     readfile(filename, &vars, &clauses, clause);
-    auto readf = std::chrono::high_resolution_clock::now();
-    printf("c read use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(readf - startp).count() / 1000.0);
     orivars = vars;
     oriclauses = clauses; 
     preprocess_init();
-    auto init = std::chrono::high_resolution_clock::now();
-    printf("c init use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(init - readf).count() / 1000.0);
     int res = 0;
 
     if (vars <= 1e5 && clauses <= 1e6) {
         res = preprocess_circuit();
         if (res == 10) {
-            printf("c solved by circuit check\n");
             release();
             return 10;
         }
-    }
-    auto circuit = std::chrono::high_resolution_clock::now();
-    printf("c circuit use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(circuit - init).count() / 1000.0);
-    
-    if (vars <= 1e5 && clauses <= 1e6) {
-        res = preprocess_gauss();
-        if (!res) {
-            printf("c solved by gauss elimination\n");
+        if (res == 20) {
             release();
             return 20;
         }
     }
-    auto gauss = std::chrono::high_resolution_clock::now();
-    printf("c gauss use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(gauss - circuit).count() / 1000.0);
+    
+    if (vars <= 1e5 && clauses <= 1e6) {
+        res = preprocess_gauss();
+        if (!res) {
+            release();
+            return 20;
+        }
+    }
 
     res = preprocess_up();
     if (!res) {
@@ -211,14 +203,11 @@ int preprocess::do_preprocess(char* filename) {
         clause.clear(true);
         return 20;
     }
-    auto up = std::chrono::high_resolution_clock::now();
-    printf("c up use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(up - gauss).count() / 1000.0);
 
 
     if (vars <= 1e5 && clauses <= 1e6) {
         res = preprocess_card();
         if (!res) {
-            printf("c solved by card elimination\n");
             release();
             delete []mapto;
             delete []mapval;
@@ -228,8 +217,6 @@ int preprocess::do_preprocess(char* filename) {
             return 20;        
         }
     }
-    auto card = std::chrono::high_resolution_clock::now();
-    printf("c card use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(card - up).count() / 1000.0);
 
     res = preprocess_resolution();
     if (!res) {
@@ -241,8 +228,6 @@ int preprocess::do_preprocess(char* filename) {
         resolution.clear(true);
         return 20;
     }
-    auto resol = std::chrono::high_resolution_clock::now();
-    printf("c resol use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(resol - card).count() / 1000.0);
 
 
     if (clauses <= 1e7) {
@@ -257,8 +242,6 @@ int preprocess::do_preprocess(char* filename) {
             return 20;
         }
     }
-    auto binary = std::chrono::high_resolution_clock::now();
-    printf("c binary use %.3lfs\n", std::chrono::duration_cast<std::chrono::milliseconds>(binary - resol).count() / 1000.0);
     
     release();
     return 0;
