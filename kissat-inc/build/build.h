@@ -1,5 +1,5 @@
 #define VERSION "1.0.3"
-#define COMPILER "gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0 -W -Wall -O3 -DNEMBEDDED -DNDEBUG -DNMETRICS -DNSTATISTICS"
+#define COMPILER "gcc (Ubuntu 12.2.0-3ubuntu1) 12.2.0 -W -Wall -O3 -DNEMBEDDED -DNDEBUG -DNMETRICS -DNSTATISTICS"
 #define ID "79d8d8f20465e71fd2b0f193b468898cd803a59a"
-#define BUILD "Fri Apr 28 16:51:51 CST 2023 Linux seed10 5.4.0-135-generic x86_64"
-#define DIR "/pub/netdisk1/qianyh/Light/kissat-inc/build"
+#define BUILD "Mon May 15 10:12:27 UTC 2023 Linux code-server 5.15.74-1-pve x86_64"
+#define DIR "/root/PRS-sc23/kissat-inc/build"

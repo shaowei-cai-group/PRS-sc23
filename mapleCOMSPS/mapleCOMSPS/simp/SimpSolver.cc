@@ -941,21 +941,21 @@ bool SimpSolver::gaussElim() {    assert(decisionLevel() == 0);
     Stopwatch timer;
 
     xors_found = searchXors(xors);
-    printf("c [GE] XORs: %d (time: %.2f)\n", xors.size(), timer.tick());
+    // printf("c [GE] XORs: %d (time: %.2f)\n", xors.size(), timer.tick());
 
     int upper_limit = computeVarSccs(v2scc_id, var_sccs, xors);
     computeXorSccs(xor_sccs, xors, v2scc_id, var_sccs, upper_limit);
-    printf("c [GE] XOR SCCs: %d (time: %.2f)\n", xor_sccs.size(), timer.tick());
+    // printf("c [GE] XOR SCCs: %d (time: %.2f)\n", xor_sccs.size(), timer.tick());
 
     ok = performGaussElim(xor_sccs);
 
     for (int i = 0; i < xors.size(); i++) delete xors[i];
     for (int i = 0; i < xor_sccs.size(); i++) delete xor_sccs[i];
 
-    printf("c [GE] matrices: %d, unary xor: %d, bin xor: %d, bin added: %d (time: %.2f)\n",
-       stat_gauss, stat_gauss_case1, stat_gauss_case2, stat_gauss_bin_added, timer.tick());
+    // printf("c [GE] matrices: %d, unary xor: %d, bin xor: %d, bin added: %d (time: %.2f)\n",
+    //    stat_gauss, stat_gauss_case1, stat_gauss_case2, stat_gauss_bin_added, timer.tick());
     stat_gauss_time += timer.total();
-    if (!ok) printf("c [GE] UNSAT\n");
+    // if (!ok) printf("c [GE] UNSAT\n");
 
     return ok;
 }
