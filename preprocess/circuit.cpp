@@ -139,7 +139,7 @@ bool preprocess::cnf2aig() {
         val[i] = find_fa(abs(val[i])) * pnsign(val[i]); 
         int v = val[i], x = abs(v);
         if (is_input[x]) fixed[x] = pnsign(v), rins--;
-        else andg.push(v);
+        else if(cell[x] != 0) andg.push(v);
     }
     nxors /= 96;
     if (andg.size() == 0) return false;
