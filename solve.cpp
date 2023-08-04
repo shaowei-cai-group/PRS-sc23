@@ -11,14 +11,17 @@ char* worker_sign = "";
 std::atomic<int> terminated;
 int result = 0;
 int winner_conf;
-vec<int> model;
 
 void * read_worker(void *arg) {
    basesolver * sq = (basesolver *)arg;
-    if (worker_sign == "") 
+    if (worker_sign == "") {
+        // printf("read_pre\n");
       sq->parse_from_PAR(sq->controller->pre);
-   else 
+    }
+   else {
+        // printf("read_cnf\n");
       sq->parse_from_CNF(worker_sign);
+   }
    return NULL;
 }
 
@@ -63,6 +66,8 @@ void light::diversity_workers() {
             if (i) workers[i]->configure("order_reset", i);
         }
         if (OPT(pakis)) {
+
+            if(OPT(nThreads) != 8) {
             if (i == 13 || i == 14 || i == 20 || i == 21)
                 workers[i]->configure("tier1", 3);
             else
@@ -96,7 +101,49 @@ void light::diversity_workers() {
                 workers[i]->configure("phase", 0);
             else
                 workers[i]->configure("phase", 1);
-        }
+            } else {
+
+                // printf("new config\n");
+                if( i == 1 ) {
+                    workers[i]->configure("tier1", 3);
+                } else {
+                    workers[i]->configure("tier1", 2);
+                }
+
+                if ( i == 1 || i == 2) {
+                    workers[i]->configure("chrono", 0);
+                } else {
+                    workers[i]->configure("chrono", 1);
+                }
+
+                if (i == 2 || i == 3)
+                    workers[i]->configure("stable", 0);
+                else if (i == 4)
+                    workers[i]->configure("stable", 2);
+                else
+                    workers[i]->configure("stable", 1);
+
+                
+                if (i == 5 || i == 6)
+                    workers[i]->configure("walkinitially", 1);
+                else
+                    workers[i]->configure("walkinitially", 0);
+
+                if (i == 3 || i == 4)
+                    workers[i]->configure("target", 0);
+                else if (i == 6 || i == 7)
+                    workers[i]->configure("target", 1);
+                else
+                    workers[i]->configure("target", 2);
+
+
+                if (i == 2 || i == 7)
+                    workers[i]->configure("phase", 0);
+                else
+                    workers[i]->configure("phase", 1);
+                }
+
+                }                
     }
 }
 
@@ -139,6 +186,7 @@ int light::solve() {
         }
     }
 
+    pthread_join(shared_ptr[0], NULL);
     for (int i = 0; i < OPT(nThreads); i++) {
         pthread_join(ptr[i], NULL);
     }
@@ -150,11 +198,14 @@ int light::solve() {
 }
 
 int light::run() {
+
     init_workers();
     diversity_workers();
+
     if (OPT(preprocessor)) {
         pre = new preprocess();
-        int res = pre->do_preprocess(filename);
+        int res = pre->do_preprocess(this);
+    
         if (res == 20) return 20;
         else if (res == 10) {
             for (int i = 1; i <= pre->vars; i++) {
@@ -164,7 +215,9 @@ int light::run() {
         }
     }
     else worker_sign = filename;
+
     parse_input();
+
     if (OPT(clause_sharing)) share();
     int res = solve();
     if (res == 10 && OPT(preprocessor)) {
@@ -174,8 +227,11 @@ int light::run() {
         model.clear();
         for (int i = 1; i <= pre->orivars; i++) {
             model.push(i * pre->mapval[i]);
-        }    
+        }
     }
+
+    // pthread_join
+
     return res;
 }
 
@@ -193,7 +249,7 @@ void solve(int argc, char **argv) {
     int res = S->run();
     if (res == 10) {
         printf("s SATISFIABLE\n");
-        print_model(model);
+        // print_model(model);
     }
     else if (res == 20) {
         printf("s UNSATISFIABLE\n");

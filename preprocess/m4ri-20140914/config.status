@@ -437,7 +437,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This config.status script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it."
 
-ac_pwd='/home/chenzh/solvers/Light/preprocess/m4ri-20140914'
+ac_pwd='/pub/netdisk1/qianyh/emu/PRS-sc23/preprocess/m4ri-20140914'
 srcdir='.'
 INSTALL='/usr/bin/install -c'
 MKDIR_P='/usr/bin/mkdir -p'
@@ -827,9 +827,9 @@ S["PNG_LIBS"]=""
 S["PNG_CFLAGS"]=""
 S["PKG_CONFIG_LIBDIR"]=""
 S["PKG_CONFIG_PATH"]=""
-S["PKG_CONFIG"]="/usr/bin/pkg-config"
-S["M4RI_CPU_L3_CACHE"]="33554432"
-S["M4RI_CPU_L2_CACHE"]="524288"
+S["PKG_CONFIG"]="/pub/netdisk1/qianyh/homebrew/bin/pkg-config"
+S["M4RI_CPU_L3_CACHE"]="36700160"
+S["M4RI_CPU_L2_CACHE"]="262144"
 S["M4RI_CPU_L1_CACHE"]="32768"
 S["PAPI_CFLAGS"]=""
 S["PAPI_LDFLAGS"]=""
@@ -899,12 +899,12 @@ S["mkdir_p"]="$(MKDIR_P)"
 S["MKDIR_P"]="/usr/bin/mkdir -p"
 S["INSTALL_STRIP_PROGRAM"]="$(install_sh) -c -s"
 S["STRIP"]="strip"
-S["install_sh"]="${SHELL} /home/chenzh/solvers/Light/preprocess/m4ri-20140914/install-sh"
-S["MAKEINFO"]="${SHELL} /home/chenzh/solvers/Light/preprocess/m4ri-20140914/missing makeinfo"
-S["AUTOHEADER"]="${SHELL} /home/chenzh/solvers/Light/preprocess/m4ri-20140914/missing autoheader"
-S["AUTOMAKE"]="${SHELL} /home/chenzh/solvers/Light/preprocess/m4ri-20140914/missing automake-1.14"
-S["AUTOCONF"]="${SHELL} /home/chenzh/solvers/Light/preprocess/m4ri-20140914/missing autoconf"
-S["ACLOCAL"]="${SHELL} /home/chenzh/solvers/Light/preprocess/m4ri-20140914/missing aclocal-1.14"
+S["install_sh"]="${SHELL} /pub/netdisk1/qianyh/emu/PRS-sc23/preprocess/m4ri-20140914/install-sh"
+S["MAKEINFO"]="${SHELL} /pub/netdisk1/qianyh/emu/PRS-sc23/preprocess/m4ri-20140914/missing makeinfo"
+S["AUTOHEADER"]="${SHELL} /pub/netdisk1/qianyh/emu/PRS-sc23/preprocess/m4ri-20140914/missing autoheader"
+S["AUTOMAKE"]="${SHELL} /pub/netdisk1/qianyh/emu/PRS-sc23/preprocess/m4ri-20140914/missing automake-1.14"
+S["AUTOCONF"]="${SHELL} /pub/netdisk1/qianyh/emu/PRS-sc23/preprocess/m4ri-20140914/missing autoconf"
+S["ACLOCAL"]="${SHELL} /pub/netdisk1/qianyh/emu/PRS-sc23/preprocess/m4ri-20140914/missing aclocal-1.14"
 S["VERSION"]="20140914"
 S["PACKAGE"]="m4ri"
 S["CYGPATH_W"]="echo"

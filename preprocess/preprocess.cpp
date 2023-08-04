@@ -1,4 +1,5 @@
 #include "preprocess.hpp"
+#include "../light.hpp"
 #include "../utils/parse.hpp"
 #include <chrono>
 
@@ -9,6 +10,8 @@ preprocess::preprocess():
 {}
 
 void preprocess::preprocess_init() {
+    // printf("vars: %d clauses: %d\n", vars, clauses);
+
     f = new int[vars + 10];
     val = new int[vars + 10];
     color = new int[vars + 10];
@@ -168,10 +171,30 @@ void preprocess::get_complete_model() {
     }  
 }
 
-int preprocess::do_preprocess(char* filename) {
-    readfile(filename, &vars, &clauses, clause);
+int preprocess::do_preprocess(light* S) {
+
+    vars = S->num_vars;
+    clauses = S->clauses.size();
+
     orivars = vars;
-    oriclauses = clauses; 
+    oriclauses = clauses;
+
+    clause.push();
+    for(int i=0; i<S->clauses.size(); i++) {
+        vec<int> t;
+        for(int j=0; j<S->clauses[i].size(); j++) {
+            t.push(S->clauses[i][j]);
+        }
+        clause.push();
+        t.copyTo(clause[i+1]);
+    }
+
+    for(int i=1; i<=clauses; i++) {
+        assert(clause[i].size() > 0);
+    }
+
+    assert(clause.size() == S->clauses.size() + 1);
+
     preprocess_init();
     int res = 0;
 
@@ -186,7 +209,7 @@ int preprocess::do_preprocess(char* filename) {
             return 20;
         }
     }
-    
+
     if (vars <= 1e5 && clauses <= 1e6) {
         res = preprocess_gauss();
         if (!res) {
@@ -203,7 +226,6 @@ int preprocess::do_preprocess(char* filename) {
         clause.clear(true);
         return 20;
     }
-
 
     if (vars <= 1e5 && clauses <= 1e6) {
         res = preprocess_card();
@@ -229,9 +251,9 @@ int preprocess::do_preprocess(char* filename) {
         return 20;
     }
 
-
     if (clauses <= 1e7) {
         res = preprocess_binary();
+
         if (!res) {
             release();
             delete []mapto;

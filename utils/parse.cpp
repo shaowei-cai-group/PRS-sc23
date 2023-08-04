@@ -41,6 +41,9 @@ char *read_int(char *p, int *i)
 }
 
 void readfile(const char *file, int *vars, int *clauses, vec<vec<int>> &clause) {
+    
+
+
     std::string infile(file);
 	std::ifstream fin(infile);
     fin.seekg(0, fin.end);

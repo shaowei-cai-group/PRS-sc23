@@ -33,6 +33,9 @@ public:
     light();
     ~light();
 
+    int num_vars;
+    vec<vec<int>> clauses;
+
     char *filename;
     paras *opt;
     preprocess *pre;
@@ -42,6 +45,9 @@ public:
     
     vec<char*> *configure_name;
     vec<double> *configure_val;
+    vec<int> model;
+
+    pthread_t *shared_ptr;
 
     int finalResult;
     int winner_period, winner_id;

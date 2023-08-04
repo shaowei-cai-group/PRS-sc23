@@ -12,11 +12,16 @@ light::light():
 {
     opt = new paras();
     opt->init_paras();
+    num_vars = 0;
 }
 
 light::~light() {
     for (int i = 0; i < workers.size(); i++) delete(workers[i]);
     workers.clear(true);
+
+    // delete filename;
+    delete opt;
+    delete pre;
 }
 
 

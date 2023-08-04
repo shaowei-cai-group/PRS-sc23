@@ -119,9 +119,13 @@ void light::share() {
             sharers.push(s);
         }
         
-        pthread_t *ptr = new pthread_t[sharers_number];
+        // printf("sharers_number: %d\n", sharers_number);
+        shared_ptr = new pthread_t[sharers_number];
         for (int i = 0; i < sharers_number; i++) {
-            pthread_create(&ptr[i], NULL, share_worker, sharers[i]);
+            pthread_create(&shared_ptr[i], NULL, share_worker, sharers[i]);
         }
+
+        // pthread_create(shared_ptr, NULL, share_worker, sharers[0]);
+
     }   
 }

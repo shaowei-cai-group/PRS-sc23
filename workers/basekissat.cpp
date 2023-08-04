@@ -105,16 +105,21 @@ basekissat::~basekissat(){
 }
 
 void basekissat::parse_from_CNF(char* filename) {
-    int vars, clauses;
-    vec<vec<int>> clause;
-    readfile(filename, &vars, &clauses, clause);
-    maxvar = vars;
+    // int vars, clauses;
+    // vec<vec<int>> clause;
+    // readfile(filename, &vars, &clauses, clause);
+    // maxvar = vars;
+
+    maxvar = this->controller->num_vars;
+
     solver->threads = controller->opt->nThreads;
-    kissat_reserve(solver, vars);
-    for (int i = 1; i <= clauses; i++) {
-        int l = clause[i].size();
+
+    kissat_reserve(solver, maxvar);
+
+    for (int i = 1; i <= this->controller->clauses.size(); i++) {
+        int l = controller->clauses[i].size();
         for (int j = 0; j < l; j++)
-            add(clause[i][j]);
+            add(controller->clauses[i][j]);
         add(0);
     }
 }
@@ -123,10 +128,21 @@ void basekissat::parse_from_PAR(preprocess* pre) {
     maxvar = pre->vars;
     solver->threads = controller->opt->nThreads;
     kissat_reserve(solver, pre->vars);
+
+    // for(int i=0; i<pre->clause.size(); i++) {
+    //     assert(pre->clause[i].size() != 0);
+    //     // for(int j=0; j<pre->clause[i].size(); j++) {
+    //     //     printf("%d ", pre->clause[i][j]);
+    //     // }
+    //     // printf("\n");
+    // }
+
     for (int i = 1; i <= pre->clauses; i++) {
         int l = pre->clause[i].size();
-        for (int j = 0; j < l; j++)
+        assert(l != 0);
+        for (int j = 0; j < l; j++) {
             add(pre->clause[i][j]);
+        }
         add(0);
     }
 }

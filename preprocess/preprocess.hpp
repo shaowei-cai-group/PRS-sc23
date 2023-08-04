@@ -57,6 +57,8 @@ struct type_gate {
     }
 };
 
+class light;
+
 struct preprocess {
 public:   
     preprocess();
@@ -85,7 +87,7 @@ public:
     bool preprocess_binary();
     bool preprocess_up();
     void get_complete_model();
-    int  do_preprocess(char* filename);
+    int  do_preprocess(light* S);
 
     vec<vec<int>> card_one;
     vec<vec<double>> mat;
