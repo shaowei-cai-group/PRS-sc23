@@ -2,7 +2,7 @@
 
 class light;
 
-light* prs_init();
+light* prs_init(int num_threads);
 
 void prs_add(light* S, int lit);
 

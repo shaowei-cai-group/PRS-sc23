@@ -29,7 +29,7 @@ uname -v = #166-Ubuntu SMP Tue Apr 18 16:51:45 UTC 2023
 
 PATH: /pub/netdisk1/qianyh/homebrew/bin
 PATH: /pub/netdisk1/qianyh/homebrew/sbin
-PATH: /home/qianyh/.vscode-server/bin/695af097c7bd098fbf017ce3ac85e09bbc5dda06/bin/remote-cli
+PATH: /home/qianyh/.vscode-server/bin/2ccd690cbff1569e4a83d7c43d45101f817401dc/bin/remote-cli
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /usr/sbin
@@ -364,7 +364,7 @@ configure:8739: gcc -o conftest -g -O2   conftest.c  >&5
 configure:8739: $? = 0
 configure:8739: ./conftest
 configure:8739: $? = 0
-configure:8749: result: 406f1:48200800:7ffefbff:bfebfbff
+configure:8749: result: 406f1:30200800:7ffefbff:bfebfbff
 configure:8761: checking whether mmx is supported
 configure:8773: result: yes
 configure:8776: checking whether sse is supported
@@ -819,7 +819,7 @@ ax_cv_c_flags__msse3=yes
 ax_cv_c_flags__msse=yes
 ax_cv_cpu_vendor=Intel
 ax_cv_func_posix_memalign_works=yes
-ax_cv_gcc_x86_cpuid_0x00000001=406f1:48200800:7ffefbff:bfebfbff
+ax_cv_gcc_x86_cpuid_0x00000001=406f1:30200800:7ffefbff:bfebfbff
 ax_cv_gcc_x86_cpuid_0x0=14:756e6547:6c65746e:49656e69
 ax_cv_have_mmx_ext=yes
 ax_cv_have_sse2_ext=yes

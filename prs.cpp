@@ -3,8 +3,10 @@
 
 static vec<int> tmp;
 
-light* prs_init() {
+light* prs_init(int num_threads) {
+    assert(num_threads >= 1 && num_threads <= 128);
     light* S = new light();
+    S->opt->nThreads = num_threads;
     return S;
 }
 void prs_add(light* S, int lit) {

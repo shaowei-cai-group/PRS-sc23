@@ -19,7 +19,7 @@
        "Sharing lits (per every #share_intv seconds)")                         \
   PARA(shuffle, int, 1, 0, 1, "Use random shuffle")                            \
   PARA(preprocessor, int, 1, 0, 1, "Use Simplify (only preprocess)")           \
-  PARA(nThreads, int, 8, 1, 128, "Thread number")                              \
+  PARA(nThreads, int, 32, 1, 128, "Thread number")                              \
   PARA(cutoff, double, 5000, 0, 1e8, "Cutoff time")
 
 #define STR_PARAS STR_PARA(config_filename, "", "Config file")
