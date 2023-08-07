@@ -20,7 +20,9 @@ You can run `build.sh` to build `libprs.a`
 #include "PRS-sc23/prs.h"
 
 int main() {
-    light* S = prs_init();
+
+    // 8 threads
+    light* S = prs_init(8);
 
     prs_add(S, 1);
     prs_add(S, -2);

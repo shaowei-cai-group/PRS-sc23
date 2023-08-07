@@ -22,7 +22,8 @@ void prs_add(light* S, int lit) {
 int prs_solve(light* S) {
     assert(tmp.size() == 0);
     int res = S->run();
-    // printf("========== solve ============\n");
+    printf("========== solve ============\n");
+    printf("result: %d\n", res);
     return res;
 }
 
